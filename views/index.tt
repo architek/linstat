@@ -1,0 +1,64 @@
+<script type="text/javascript">
+ function loadval(){
+  $.getJSON("/stats", 
+   function(data) {
+    $(".value").each(function() { $(this).html(data[this.id])});
+    $("#loadavg").removeClass("failure");
+    $("#freq").removeClass("failure");
+    $("#temp").removeClass("failure");
+    if (data.loadavg >= 0.8) { $("#loadavg").addClass("failure"); }
+    if (parseInt(data.freq) > 500) { $("#freq").addClass("failure"); }
+    if (parseInt(data.temp) > 70) { $("#temp").addClass("failure"); }
+   })
+   .success(function(data) { $("#conn").text("Connected").removeClass();})
+   .error(function(data) { $("#conn").text("Disconnected").removeClass().addClass("failure");});
+  if ($("#stop").text() != 1) {
+   setTimeout("loadval()",<%refresh_time%>);
+  }
+ }
+ $(document).ready(function(){ 
+  $("#stop").hide();
+  $.getJSON("/config",
+   function(data) {
+    $(".value").each(function() { $(this).html(data[this.id])});
+  });
+  loadval();
+ });
+</script>
+
+<div class='container'>
+ <div class='logo'>
+ <img width="225" src="/images/sprite.png"/>
+ </div>
+ <div class='right'>
+ <p>
+  <span class='value' id='time'></span> - <span class='value' id='uptime'></span> - <span class='value' id='conn'></span>
+ </p>
+ <p>
+  Version <span class='value' id='version'></span> - <span><a href="http://github.com/architek/pistat">Code on Github</a></span>
+ </p>
+ <p><span class='value' id='uname'></span> - RaspberryPi Revision <span class='value' id='rev'></span></p>
+ <p><span class='value' id='lversion'></span> - <span class='value' id='cmdline'></span></p>
+ </div>
+</div>
+
+<div id='about-content'>
+<table>
+<tr>
+<%FOREACH stat IN data %><th><% stat %></th> 
+<%END%></tr>
+<tr>
+<%FOREACH stat IN data %><td class='pre value' id='<% stat %>'></td> 
+<%END%></tr>
+</table>
+<br/>
+<table>
+<tr>
+<%FOREACH stat IN gpio %><th><% stat %></th> 
+<%END%></tr>
+<tr>
+<%FOREACH stat IN gpio %><td class='pre value' id='<% stat %>'></td> 
+<%END%></tr>
+</table>
+</div>
+<p class='value' id='stop'>0</p>
