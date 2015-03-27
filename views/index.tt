@@ -7,8 +7,8 @@
     $("#freq").removeClass("failure");
     $("#temp").removeClass("failure");
     if (data.loadavg >= 0.8) { $("#loadavg").addClass("failure"); }
-    if (parseInt(data.freq) > 500) { $("#freq").addClass("failure"); }
-    if (parseInt(data.temp) > 70) { $("#temp").addClass("failure"); }
+    if (parseInt(data.freq) > 1500) { $("#freq").addClass("failure"); }
+    if (parseInt(data.temp) > 65) { $("#temp").addClass("failure"); }
    })
    .success(function(data) { $("#conn").text("Connected").removeClass();})
    .error(function(data) { $("#conn").text("Disconnected").removeClass().addClass("failure");});
@@ -28,16 +28,16 @@
 
 <div class='container'>
  <div class='logo'>
- <img width="225" src="/images/sprite.png"/>
+ <img width="57" src="/images/sprite.png"/>
  </div>
  <div class='right'>
  <p>
   <span class='value' id='time'></span> - <span class='value' id='uptime'></span> - <span class='value' id='conn'></span>
  </p>
  <p>
-  Version <span class='value' id='version'></span> - <span><a href="http://github.com/architek/pistat">Code on Github</a></span>
+  Version <span class='value' id='version'></span> - <span><a href="http://github.com/architek/linstat">Code on Github</a></span>
  </p>
- <p><span class='value' id='uname'></span> - RaspberryPi Revision <span class='value' id='rev'></span></p>
+ <p><span class='value' id='uname'></span> </p>
  <p><span class='value' id='lversion'></span> - <span class='value' id='cmdline'></span></p>
  </div>
 </div>
@@ -52,13 +52,15 @@
 <%END%></tr>
 </table>
 <br/>
+
 <table>
 <tr>
-<%FOREACH stat IN gpio %><th><% stat %></th> 
-<%END%></tr>
+<th>Processes<th>
+</tr>
 <tr>
-<%FOREACH stat IN gpio %><td class='pre value' id='<% stat %>'></td> 
-<%END%></tr>
+<td class='pre value' id='top'></td>
+</tr>
 </table>
+
 </div>
 <p class='value' id='stop'>0</p>
